@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="css.css">
+    <title>Comment Test</title>
+</head>
+
+<body>
+    <center>
+
+
+        <h1>Spoonacular API</h1>
+        <p style="font-size: 2em;">
+            This API will be used to generate recipe information. Below is just a sample of what it provides.
+            Nutritional information, dietary restrictions, and even cost can be implemented, among many of other
+            options.
+        </p>
+        <button onclick="getRandomRecipe()" style="background-color:rgb(19, 221, 137);"><h2>I'm Hungry!</h2></button>
+        <div id="recipecontainer"></div>
+
+        <script>
+            function getRandomRecipe() {
+                const apiUrl = 'https://api.spoonacular.com/recipes/random?apiKey=da8821d24b1f4f9784c73edfc69a30ed';
+                fetch(apiUrl)
+                    .then(response => response.json())
+                    .then(data => displayRecipe(data.recipes[0]))
+                    .catch(e => console.error('Error:', e));
+            }
+
+            function displayRecipe(recipe) {
+                const title = recipe.title;
+                const image = recipe.image;
+                const ingredients = recipe.extendedIngredients.map(ingredient => `${ingredient.amount} ${ingredient.unit} ${ingredient.name}`).join('<br>');
+                const instructions = recipe.instructions;
+                const time = recipe.readyInMinutes;
+                const servings = recipe.servings;
+                const link = recipe.sourceUrl
+
+                const recipeHTML = `
+                                        <h2><a href="${link}" target="_new">${title}</a></h2>
+                                        <img src="${image}" alt="${title} Recipe">
+                                        <br>Ready in <h3>${time} miniutes</h3>.
+                                        <h3>Servings:</h3> ${servings}
+                                        <h3>Ingredients:</h3>
+                                        <p>${ingredients}</p>
+                                        <h3>Instructions:</h3>
+                                        <p>${instructions}</p>
+                                        <p "style: margin-bottom: 200px;"></p>
+                                `;
+                document.getElementById('recipecontainer').innerHTML = recipeHTML;
+            }
+        </script>
+        <hr>
+        <h1>User Recipe Comments</h1>
+        <p style="font-size: 2em;">
+            Below is a sample of a recipe forum with emoji reactions. This forum also allows for preset moderating and message reporting/blocking if offensive material is posted.
+        </p>
+    </center>
+    <p>
+    <div id="disqus_thread"></div>
+    </p>
+
+    <script>
+        /**
+        *  RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
+        *  LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables    */
+        /*
+        var disqus_config = function () {
+        this.page.url = PAGE_URL;  // Replace PAGE_URL with your page's canonical URL variable
+        this.page.identifier = PAGE_IDENTIFIER; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+        };
+        */
+        (function () { // DON'T EDIT BELOW THIS LINE
+            var d = document, s = d.createElement('script');
+            s.src = 'https://renabmew.disqus.com/embed.js';
+            s.setAttribute('data-timestamp', +new Date());
+            (d.head || d.body).appendChild(s);
+        })();
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by
+            Disqus.</a></noscript>
+
+    <script id="dsq-count-scr" src="//renabmew.disqus.com/count.js" async></script>
+    <script src="spoon.js"></script>
+</body>
+
+</html>
